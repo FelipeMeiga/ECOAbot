@@ -4,7 +4,7 @@ import math
 
 sender_email="email"
 rec_email="email"
-password="spassword"
+password="password"
 
 input_ = open("input.txt", "r")
 input_content = input_.read()
