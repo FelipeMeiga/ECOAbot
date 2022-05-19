@@ -2,9 +2,9 @@ import smtplib
 import time
 import math
 
-sender_email="email.botv2@gmail.com"
-rec_email="felipe.meiga@gmail.com"
-password="senhafoda123$"
+sender_email="email"
+rec_email="email"
+password="spassword"
 
 input_ = open("input.txt", "r")
 input_content = input_.read()
