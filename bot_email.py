@@ -3,7 +3,7 @@ import time
 import math
 
 sender_email="email"
-rec_email="email"
+rec_email="email2"
 password="password"
 
 input_ = open("input.txt", "r")
@@ -59,8 +59,6 @@ def email_sender(subject, msg):
     except:
         print("Email failed to send")
 
-subject = status
-
 find_tempo(lines, i, buffer_tempo_list)
 print_buffer_tempo_list(buffer_tempo_list)
 
@@ -68,8 +66,14 @@ buffer_3 = 0
 
 while buffer_3 < len(buffer_tempo_list):
     msg = lines[buffer_3]
+    total_hours = open("total_hours.txt", "r")
+    hours = int(total_hours.read())
+    subject = hours
     email_sender(subject, msg)
+    total_hours.close()
     time.sleep(buffer_tempo_list[buffer_3] * 60)
+    hours += buffer_tempo_list[buffer_3]
+    total_hours = open("total_hours.txt", "w")
+    total_hours.write(str(hours))
+    total_hours.close()
     buffer_3 += 1
-
-
