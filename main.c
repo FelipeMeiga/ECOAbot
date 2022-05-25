@@ -10,7 +10,7 @@
 typedef struct queue
 {
     char url[200];
-    float video_length;
+    int video_length;
     struct queue *next;
 }Queue;
 
@@ -31,7 +31,7 @@ int is_list_empty(Queue *q)
     return q == NULL;
 }
 
-void format_url(char *string, char *url_, float *vid_l)
+void format_url(char *string, char *url_, int *vid_l)
 {
     int string_len = strlen(string);
     int space_i = 0;
@@ -53,10 +53,12 @@ void format_url(char *string, char *url_, float *vid_l)
         exp++;
     }
 
-    *vid_l = (float)total;
+    for(int i = space_i; i < SIZE; i++) url_[i] = '\0';
+
+    *vid_l = total;
 }
 
-Queue *insert_queue(Queue *q, char *url, float *vid_l, int *queue_size)
+Queue *insert_queue(Queue *q, char *url, int *vid_l, int *queue_size)
 {
     if (is_list_empty(q))
     {
@@ -126,7 +128,7 @@ void run_queue(Queue *q, int queue_size, FILE *state)
 
         system(command);
 
-        sleep(5);
+        sleep(10);
 
         SetCursorPos(1920/2, 1080/2);
 
@@ -134,9 +136,10 @@ void run_queue(Queue *q, int queue_size, FILE *state)
 		sleep(0.1);
 		mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 
-        printf("Video %d: %s - Video length: %.2f\n", i+1, aux->url, aux->video_length);
+        printf("Video %d: %s - Video length: %d\n", i+1, aux->url, aux->video_length);
 
         sleep(aux->video_length * 60);
+
         aux = aux->next;
         system("taskkill /F /IM chrome.exe /T");
     }
@@ -152,19 +155,20 @@ int main(void)
 
     char s[SIZE];
     char url[SIZE];
-    float vid_l = 0;
+    int vid_l = 0;
     
     FILE *input = open_file("input.txt", "r");
+
     while(!feof(input))
     {
+        for(int i = 0; i < SIZE; i++) s[i] = ' ';
         fgets(s, SIZE, input);
         format_url(s, url, &vid_l);
         q = insert_queue(q, url, &vid_l, &queue_size);
     }
     fclose(input);
-
     FILE *state = open_file("state.txt", "w");
-    print_queue(q);
+    //print_queue(q);
     run_queue(q, queue_size, state);
     free_queue(q);
     fclose(state);
